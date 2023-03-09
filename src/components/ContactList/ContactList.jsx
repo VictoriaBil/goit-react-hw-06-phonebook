@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import css from './ContactList.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeContact } from '../../redux/contactsSlice';
@@ -46,14 +45,3 @@ export function ContactList() {
     </ul>
   );
 }
-
-ContactList.propTypes = {
-  filteredContacts: PropTypes.arrayOf(
-    PropTypes.exact({
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
-    })
-  ),
-  deleteContact: PropTypes.func,
-};

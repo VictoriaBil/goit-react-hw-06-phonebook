@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import css from './Form.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/contactsSlice';
@@ -88,7 +87,3 @@ export function Form() {
     </form>
   );
 }
-
-Form.propTypes = {
-  onSubmit: PropTypes.func,
-};
