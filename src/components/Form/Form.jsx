@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import css from './Form.module.css';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/contactsSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import { nanoid } from 'nanoid';
 
 export function Form() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts);
 
   function handleChange(evt) {
     const { name, value } = evt.currentTarget;
@@ -27,8 +30,27 @@ export function Form() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const contact = { name: name, number: number };
-    dispatch(addContact(contact));
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      return toast.warning(`${name} is alredy in contacts.`, {
+        autoClose: 2000,
+        theme: 'colored',
+      });
+    } else if (contacts.find(contact => contact.number === number)) {
+      return toast.warning(`${number} is already in contacts`, {
+        autoClose: 2000,
+        theme: 'colored',
+      });
+    } else {
+      dispatch(addContact({ id: nanoid(), name, number }));
+      toast.success(`${name} has been added`, {
+        autoClose: 2000,
+        theme: 'colored',
+      });
+    }
     setName('');
     setNumber('');
   }
@@ -62,10 +84,11 @@ export function Form() {
       <button className={css.formBtn} type="submit">
         Add contact
       </button>
+      <ToastContainer />
     </form>
   );
 }
 
 Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
 };
